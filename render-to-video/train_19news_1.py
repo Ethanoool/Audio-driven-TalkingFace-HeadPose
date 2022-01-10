@@ -1,4 +1,4 @@
-%%writefile render-to-video/train_19news_1.py
+
 import os, sys, glob
 
 def get_news(n):
