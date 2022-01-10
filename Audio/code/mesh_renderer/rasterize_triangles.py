@@ -1,3 +1,4 @@
+
 # Copyright 2017 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +26,7 @@ from . import camera_utils
 
 rasterize_triangles_module = tf.load_op_library(
     #os.path.join(os.environ['TEST_SRCDIR'],
-    os.path.join('/home4/yiran/TalkingFace/Pipeline/Deep3DFaceReconstruction',
+    os.path.join('/content/Audio-driven-TalkingFace-HeadPose/Deep3DFaceReconstruction',
     'tf_mesh_renderer/mesh_renderer/kernels/rasterize_triangles_kernel.so'))
 
 
