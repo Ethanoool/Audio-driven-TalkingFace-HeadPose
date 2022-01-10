@@ -1,3 +1,4 @@
+
 #encoding:utf-8
 #test different audio
 import os
@@ -12,19 +13,19 @@ import sys
 def getsingle(srcdir,name,varybg=0,multi=0):
 	srcroot = os.getcwd()
 	if not varybg:
-		imgs = glob.glob(os.path.join(srcroot,srcdir,'*_blend.png'))
-		print('srcdir',os.path.join(srcroot,srcdir,'*_blend.png'))
+			imgs = glob.glob(os.path.join(srcroot,srcdir,'*_blend.png'))
+			print('srcdir',os.path.join(srcroot,srcdir,'*_blend.png'))
 	else:
-		imgs = glob.glob(os.path.join(srcroot,srcdir,'*_blend2.png'))
-		print('srcdir',os.path.join(srcroot,srcdir,'*_blend2.png'))
+			imgs = glob.glob(os.path.join(srcroot,srcdir,'*_blend2.png'))
+			print('srcdir',os.path.join(srcroot,srcdir,'*_blend2.png'))
 	if not os.path.exists('../../render-to-video/datasets/list/testSingle'):
-		os.makedirs('../../render-to-video/datasets/list/testSingle')
+			os.makedirs('../../render-to-video/datasets/list/testSingle')
 	f1 = open('../../render-to-video/datasets/list/testSingle/%s.txt'%name,'w')
 	imgs = sorted(imgs)
 	if multi:
-		imgs = imgs[2:]
+			imgs = imgs[2:]
 	for im in imgs:
-		print(im, file=f1)
+			print(im, file=f1)
 	f1.close()
 
 gpu_id = 0 if len(sys.argv) < 4 else int(sys.argv[3])
@@ -37,12 +38,12 @@ n = int(sys.argv[2])#person id
 if __name__ == "__main__":
 	person = str(n)
 	if os.path.exists(os.path.join('../audio/',audiobasen+'.wav')):
-		in_file = os.path.join('../audio/',audiobasen+'.wav')
+			in_file = os.path.join('../audio/',audiobasen+'.wav')
 	elif os.path.exists(os.path.join('../audio/',audiobasen+'.mp3')):
-		in_file = os.path.join('../audio/',audiobasen+'.mp3')
+			in_file = os.path.join('../audio/',audiobasen+'.mp3')
 	else:
-		print('audio file not exists, please put in %s'%os.path.join(os.getcwd(),'../audio'))
-		exit(-1)
+			print('audio file not exists, please put in %s'%os.path.join(os.getcwd(),'../audio'))
+			exit(-1)
 
 	audio_exp_name = 'atcnet_pose0_con3/'+person
 	audiomodel=os.path.join(audio_exp_name,audiobasen+'_%d'%audioepoch)
@@ -51,14 +52,14 @@ if __name__ == "__main__":
 	pingyi = 1;
 	seq='rseq_'+person+'_'+audiobasen+post
 	if audioepoch == 49:
-		seq='rseq_'+person+'_'+audiobasen+'_%d%s'%(audioepoch,post)
+			seq='rseq_'+person+'_'+audiobasen+'_%d%s'%(audioepoch,post)
 
 
 	## 1.audio to 3dmm
 	if not os.path.exists(sample_dir+'/00000.npy'):
-		add = '--model_name ../model/%s/atcnet_lstm_%d.pth --pose 1 --relativeframe 0' % (audio_exp_name,audioepoch)
-		print('python atcnet_test1.py --device_ids %d %s --sample_dir %s --in_file %s' % (gpu_id,add,sample_dir,in_file))
-		os.system('python atcnet_test1.py --device_ids %d %s --sample_dir %s --in_file %s' % (gpu_id,add,sample_dir,in_file))
+			add = '--model_name ../model/%s/atcnet_lstm_%d.pth --pose 1 --relativeframe 0' % (audio_exp_name,audioepoch)
+			print('python atcnet_test1.py --device_ids %d %s --sample_dir %s --in_file %s' % (gpu_id,add,sample_dir,in_file))
+			os.system('python atcnet_test1.py --device_ids %d %s --sample_dir %s --in_file %s' % (gpu_id,add,sample_dir,in_file))
 
 	## 2.background matching
 	speed=1
@@ -79,7 +80,7 @@ if __name__ == "__main__":
 	## 4.blend rendered with background
 	srcdir = save_dir
 	#if not os.path.exists(save_dir+'/00000_blend2.png'):
-	cmd = "cd ../results; matlab -nojvm -nosplash -nodesktop -nodisplay -r \"alpha_blend_vbg('" + bgdir + "','" + srcdir + "'); quit;\""
+	cmd = "cd ../results; octave --eval \"pkg load image; alpha_blend_vbg('" + bgdir + "','" + srcdir + "'); quit;\""
 	os.system(cmd)
 
 	## 5.gan
@@ -89,13 +90,18 @@ if __name__ == "__main__":
 	os.system('cd ../../render-to-video; python test_memory.py --dataroot %s --name %s --netG unetac_adain_256 --model test --Nw 3 --norm batch --dataset_mode single_multi --use_memory 1 --attention 1 --num_test 10000 --epoch %d --gpu_ids %d --imagefolder images%s'%(seq,ganmodel,ganepoch,gpu_id,seq))
 
 
-	os.system('cp '+sample_dir2+'/R_'+person+'_reassign2-00002_blend2_fake.png '+sample_dir2+'/R_'+person+'_reassign2-00000_blend2_fake.png')
-	os.system('cp '+sample_dir2+'/R_'+person+'_reassign2-00002_blend2_fake.png '+sample_dir2+'/R_'+person+'_reassign2-00001_blend2_fake.png')
-	
-	video_name = os.path.join(sample_dir,'%s_%swav_results%s.mp4'%(person,audiobasen,post))
-	command = 'ffmpeg -loglevel panic -framerate 25  -i ' + sample_dir2 +  '/R_' + person + '_reassign2-%05d_blend2_fake.png -c:v libx264 -y -vf format=yuv420p ' + video_name
-	os.system(command)
-	command = 'ffmpeg -loglevel panic -i ' + video_name + ' -i ' + in_file + ' -vcodec copy  -acodec copy -y  ' + video_name.replace('.mp4','.mov')
+        os.system('cp '+sample_dir2+'/R_'+person+'_reassign2-00002_blend2_fake.png '+sample_dir2+'/R_'+person+'_reassign2-00000_blend2_fake.png')
+        os.system('cp '+sample_dir2+'/R_'+person+'_reassign2-00002_blend2_fake.png '+sample_dir2+'/R_'+person+'_reassign2-00001_blend2_fake.png')
+        
+        video_name = os.path.join(sample_dir,'%s_%swav_results%s.mp4'%(person,audiobasen,post))
+        command = 'ffmpeg -loglevel panic -framerate 25  -i ' + sample_dir2 +  '/R_' + person + '_reassign2-%05d_blend2_fake.png -c:v libx264 -y -vf format=yuv420p ' + video_name
+        os.system(command)
+        command = 'ffmpeg -loglevel panic -i ' + video_name + ' -i ' + in_file + ' -vcodec copy  -acodec copy -y  ' + video_name.replace('.mp4','.mov')
+        os.system(command)
+        os.remove(video_name)
+        print('saved to',video_name.replace('.mp4','.mov'))
+
+        merge_with_bigbg(audiobasen,n)
 	os.system(command)
 	os.remove(video_name)
 	print('saved to',video_name.replace('.mp4','.mov'))
