@@ -26,7 +26,7 @@ from . import camera_utils
 
 rasterize_triangles_module = tf.load_op_library(
     #os.path.join(os.environ['TEST_SRCDIR'],
-    os.path.join('/home/jcha0170/talking_face/Audio-driven-TalkingFace-HeadPose/Deep3DFaceReconstruction',
+    os.path.join('/home/jcha0170/za99/jz/colab/Audio-driven-TalkingFace-HeadPose/Deep3DFaceReconstruction',
     'tf_mesh_renderer/mesh_renderer/kernels/rasterize_triangles_kernel.so'))
 
 
